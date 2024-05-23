@@ -1,15 +1,14 @@
 package Application.Models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class Cat {
     public String name;
     private UUID catsId;

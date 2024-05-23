@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +33,7 @@ public class CatController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
     public CompletableFuture<ResponseEntity<CatDto>> getCatById(@PathVariable UUID id) {
         return catService.getCatById(id)
                 .thenApply(cat -> {
@@ -41,38 +45,44 @@ public class CatController {
                 });
     }
 
-    @PostMapping("/{personId}/cat")
-    public ResponseEntity<Void> addCat(@PathVariable UUID personId, @RequestBody CatDto catDto) {
-        Cat cat = CatDtoMapper.mapToModel(catDto);
-        personService.addCat(cat, personId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
     public ResponseEntity<Void> updateCat(@PathVariable UUID id, @RequestBody CatDto catDto) {
         Cat cat = CatDtoMapper.mapToModel(catDto);
         catService.updateCat(id, cat);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("makeFriends/{catOneId}/{catTwoId}")
+    @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
+    public ResponseEntity<Void> addCat(@PathVariable UUID catOneId, @PathVariable UUID catTwoId) {
+        catService.makeFriends(catOneId, catTwoId);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
     public ResponseEntity<Void> deleteCat(@PathVariable UUID id) {
         catService.deleteCat(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/by-color/{color}")
-    public CompletableFuture<ResponseEntity<List<CatDto>>> getCatsByColor(@PathVariable CatColor color) {
+    public CompletableFuture<ResponseEntity<List<CatDto>>> getCatsByColor(Principal principal, @PathVariable CatColor color, Authentication authentication) {
         return catService.getCatsByColor(color)
                 .thenApply(cats -> {
-                    List<CatDto> catDtos = cats.stream()
-                            .map(CatDtoMapper::mapToDto)
-                            .collect(Collectors.toList());
-
-                    if (catDtos.isEmpty()) {
+                    if (cats.isEmpty()) {
                         return ResponseEntity.notFound().build();
                     }
-                    return ResponseEntity.ok(catDtos);
+                    return ResponseEntity.ok(cats.stream()
+                            .filter(cat ->
+                                    personService.catsOwner(cat.getCatsId(), principal.getName()) ||
+                                            authentication.getAuthorities().stream()
+                                                    .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN")))
+                            .map(CatDtoMapper::mapToDto)
+                            .collect(Collectors.toList())
+                    );
                 });
     }
+
 }

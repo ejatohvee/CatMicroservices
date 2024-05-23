@@ -13,7 +13,6 @@ public class PersonEntityMapper {
         PersonEntity personEntity = new PersonEntity(
             person.getName(),
             person.getBirthdayDate());
-        personEntity.setCats(mapToEntityList(person.getCats()));
         personEntity.setPersonId(person.getPersonId());
         return personEntity;
     }
@@ -22,24 +21,7 @@ public class PersonEntityMapper {
         Person person = new Person(
             personEntity.getName(),
             personEntity.getBirthdayDate());
-        person.setCats(mapToModelList(personEntity.getCats()));
         person.setPersonId(personEntity.getPersonId());
         return person;
-    }
-
-    private static List<CatEntity> mapToEntityList(List<Cat> cats) {
-        List<CatEntity> catEntities = new ArrayList<>();
-        for (Cat cat : cats) {
-            catEntities.add(CatEntityMapper.mapToEntity(cat));
-        }
-        return catEntities;
-    }
-
-    private static List<Cat> mapToModelList(List<CatEntity> cats) {
-        List<Cat> catModels = new ArrayList<>();
-        for (CatEntity cat : cats) {
-            catModels.add(CatEntityMapper.mapToModel(cat));
-        }
-        return catModels;
     }
 }

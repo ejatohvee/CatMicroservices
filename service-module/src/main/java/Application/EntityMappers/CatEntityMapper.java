@@ -1,14 +1,10 @@
 package Application.EntityMappers;
 
 import Application.Entities.CatEntity;
+import Application.Entities.PersonEntity;
 import Application.Models.Cat;
 
 public class CatEntityMapper {
-    private static PersonEntityMapper personMapper;
-
-    public CatEntityMapper(PersonEntityMapper personMapper) {
-        this.personMapper = personMapper;
-    }
     public static CatEntity mapToEntity(Cat cat) {
         CatEntity catEntity = new CatEntity(
             cat.getName(),
@@ -28,6 +24,8 @@ public class CatEntityMapper {
             catEntity.getBirthdayDate()
         );
         cat.setCatsId(catEntity.getCatsId());
+//        PersonEntity personEntity = catEntity.getOwner();
+        cat.setOwner(PersonEntityMapper.mapToModel(catEntity.getOwner()));
         return cat;
     }
 }

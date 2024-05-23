@@ -30,7 +30,9 @@ public class CatService implements ICatService {
     }
 
     @Override
-    public CompletableFuture<Void> makeFriends(Cat firstCat, Cat secondCat) {
+    public CompletableFuture<Void> makeFriends(UUID catOneId, UUID catTwoId) {
+        Cat firstCat = getCatById(catOneId).join();
+        Cat secondCat = getCatById(catTwoId).join();
         CatEntity firstCatEntity = CatEntityMapper.mapToEntity(firstCat);
         CatEntity secondCatEntity = CatEntityMapper.mapToEntity(secondCat);
         return CompletableFuture.runAsync(() -> {
@@ -39,8 +41,8 @@ public class CatService implements ICatService {
                     throw new IllegalArgumentException("Cat not found");
                 }
 
-                firstCatEntity.getFriends().add(secondCatEntity);
-                secondCatEntity.getFriends().add(firstCatEntity);
+                firstCatEntity.addFriend(secondCatEntity);
+                secondCatEntity.addFriend(firstCatEntity);
 
                 CompletableFuture.runAsync(() -> catRepository.save(firstCatEntity));
                 CompletableFuture.runAsync(() -> catRepository.save(secondCatEntity));
@@ -52,7 +54,7 @@ public class CatService implements ICatService {
 
     @Override
     public CompletableFuture<List<Cat>> getCatsByColor(CatColor color) {
-        CompletableFuture<List<CatEntity>> catsEntities = CompletableFuture.supplyAsync(() -> catRepository.findByCatColor(color));
+        CompletableFuture<List<CatEntity>> catsEntities = CompletableFuture.supplyAsync(() -> catRepository.findByColor(color));
 
         return catsEntities.thenApply(catEntities -> catEntities.stream()
                 .map(CatEntityMapper::mapToModel)

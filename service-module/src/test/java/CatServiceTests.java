@@ -3,8 +3,7 @@ import Application.Application.Services.CatService;
 import Application.Models.Cat;
 import Application.Models.CatColor;
 import Application.Models.Person;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 //@RunWith(MockitoJUnitRunner.class)

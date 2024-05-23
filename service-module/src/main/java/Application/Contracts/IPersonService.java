@@ -16,4 +16,6 @@ public interface IPersonService {
     CompletableFuture<Object> deletePerson(UUID id);
 
     CompletableFuture<Void> addCat(Cat cat, UUID personId);
+
+    boolean catsOwner(UUID catId, String personName);
 }

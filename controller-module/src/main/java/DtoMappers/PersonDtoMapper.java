@@ -11,20 +11,19 @@ public class PersonDtoMapper {
         PersonDto personDto = new PersonDto();
         personDto.setName(person.getName());
         personDto.setBirthdayDate(person.getBirthdayDate());
-        personDto.setCats(person.getCats().stream()
-                .map(CatDtoMapper::mapToDto)
-                .collect(Collectors.toList()));
+//        personDto.setCats(person.getCats().stream()
+//                .map(CatDtoMapper::mapToDto)
+//                .collect(Collectors.toList()));
         return personDto;
     }
 
     public static Person mapToModel(PersonDto personDto) {
-        Person person = new Person(
+
+//        person.setCats(personDto.getCats().stream()
+//                .map(CatDtoMapper::mapToModel)
+//                .collect(Collectors.toList()));
+        return new Person(
         personDto.getName(),
         personDto.getBirthdayDate());
-
-        person.setCats(personDto.getCats().stream()
-                .map(CatDtoMapper::mapToModel)
-                .collect(Collectors.toList()));
-        return person;
     }
 }

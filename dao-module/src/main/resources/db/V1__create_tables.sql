@@ -23,3 +23,7 @@ CREATE TABLE IF NOT EXISTS cats_schema.cat_friends (
     FOREIGN KEY (friend_cat_id) REFERENCES cats_schema.cats(id),
     PRIMARY KEY (cat_id, friend_cat_id)
 );
+
+INSERT INTO cats_schema.roles (id, name)
+VALUES (1, 'user'),
+       (2, 'admin');

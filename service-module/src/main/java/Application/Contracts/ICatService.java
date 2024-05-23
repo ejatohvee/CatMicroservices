@@ -9,7 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface ICatService {
-    CompletableFuture<Void> makeFriends(Cat firstCat, Cat secondCat);
+    CompletableFuture<Void> makeFriends(UUID catOneId, UUID catTwoId);
     CompletableFuture<Void> changeOwner(Cat cat, Person newOwner);
 
     CompletableFuture<List<Cat>> getCatsByColor(CatColor color);

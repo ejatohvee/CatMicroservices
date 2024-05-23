@@ -3,6 +3,7 @@ package Application.Entities;
 import Application.Models.CatColor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "cats", schema= "CatsSchema")
-@Getter
-@Setter
+@Data
 public class CatEntity {
     @Column(name = "name")
     public String name;
@@ -39,6 +39,7 @@ public class CatEntity {
     @ManyToMany
     @JoinTable(
             name = "cat_friends",
+            schema = "CatsSchema",
             joinColumns = @JoinColumn(name = "cat_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_cat_id")
     )
@@ -53,5 +54,9 @@ public class CatEntity {
     }
 
     public CatEntity() {
+    }
+
+    public void addFriend(CatEntity cat){
+        friends.add(cat);
     }
 }

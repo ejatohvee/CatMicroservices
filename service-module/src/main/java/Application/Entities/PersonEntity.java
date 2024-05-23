@@ -28,6 +28,10 @@ public class PersonEntity {
             orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CatEntity> cats = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     public PersonEntity(String name, LocalDate birthdayDate) {
         this.name = name;
         this.birthdayDate = birthdayDate;

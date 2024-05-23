@@ -77,4 +77,17 @@ public class PersonService implements IPersonService {
         else throw new IllegalArgumentException();
         return CompletableFuture.completedFuture(null);
     }
+
+    @Override
+    public boolean catsOwner(UUID catId, String personName) {
+        Optional<Cat> catOptional = Optional.ofNullable(catService.getCatById(catId).join());
+
+        if (catOptional.isEmpty()) {
+            throw new IllegalArgumentException("Cat not found");
+        }
+
+        String ownerName = catOptional.get().getOwner().getName();
+        return ownerName.equals(personName);
+    }
+
 }
