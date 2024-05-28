@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>dao-module</artifactId>
+    <artifactId>cat-module</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -20,6 +20,18 @@
         <dependency>
             <groupId>ru.maksim</groupId>
             <artifactId>domain-module</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.maksim</groupId>
+            <artifactId>dao-module</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.maksim</groupId>
+            <artifactId>contracts-module</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
