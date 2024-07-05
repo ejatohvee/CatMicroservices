@@ -1,4 +1,4 @@
-package person.Services;
+package com.maksim.Lab3.persons.Services;
 
 import Entities.PersonEntity;
 import EntityMappers.PersonEntityMapper;

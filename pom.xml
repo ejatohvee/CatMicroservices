@@ -9,11 +9,11 @@
         <relativePath/>
     </parent>
     <groupId>ru.maksim</groupId>
-    <artifactId>Lab3</artifactId>
+    <artifactId>CatMicroservices</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Lab3</name>
-    <description>Lab3</description>
+    <name>CatMicroservices</name>
+    <description>CatMicroservices</description>
     <modules>
         <module>domain-module</module>
         <module>cat-module</module>

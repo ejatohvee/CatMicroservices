@@ -12,5 +12,4 @@ import java.util.UUID;
 @Repository
 public interface ICatRepository extends JpaRepository<CatEntity, UUID> {
     List<CatEntity> findByColor(CatColor catColor);
-    void deleteById(@Nullable UUID id);
 }

@@ -29,11 +29,11 @@ public class CatEntity {
     @Column(name = "birthday_date")
     private LocalDate birthdayDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private PersonEntity owner;
 
-    @ManyToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "cat_friends",
             schema = "CatsSchema",

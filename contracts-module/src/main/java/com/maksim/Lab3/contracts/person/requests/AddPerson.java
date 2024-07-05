@@ -2,5 +2,5 @@ package com.maksim.Lab3.contracts.person.requests;
 
 import Models.Person;
 
-public record addPerson(Person person) {
+public record AddPerson(Person person) {
 }

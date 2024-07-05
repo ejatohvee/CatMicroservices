@@ -4,5 +4,5 @@ import Models.Person;
 
 import java.util.UUID;
 
-public record updatePerson(UUID id, Person person) {
+public record UpdatePerson(UUID id, Person person) {
 }

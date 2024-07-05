@@ -104,6 +104,7 @@ public class CatService implements ICatService {
                     existingCat.setBreed(cat.getBreed());
                     existingCat.setBirthdayDate(cat.getBirthdayDate());
                     existingCat.setOwner(PersonEntityMapper.mapToEntity(cat.getOwner()));
+                    System.out.println(existingCat.getCatsId());
                     return CompletableFuture.runAsync(() -> catRepository.save(existingCat));
                 });
     }
@@ -112,13 +113,21 @@ public class CatService implements ICatService {
     public CompletableFuture<Void> deleteCat(UUID id) {
         return CompletableFuture.supplyAsync(() -> {
             Optional<CatEntity> optionalCatEntity = catRepository.findById(id);
+
             System.out.println(optionalCatEntity.isPresent());
+
             if (optionalCatEntity.isPresent()) {
-                catRepository.deleteById(id);
+
+                System.out.println(id);
+
+                catRepository.delete(optionalCatEntity.get());
+
                 return null;
+
             } else {
                 throw new IllegalArgumentException("Cat not found");
             }
+
         });
     }
 }

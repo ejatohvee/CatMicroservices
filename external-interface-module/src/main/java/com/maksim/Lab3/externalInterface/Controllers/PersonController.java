@@ -1,20 +1,25 @@
 package com.maksim.Lab3.externalInterface.Controllers;
 
+import DtoMappers.CatDtoMapper;
 import DtoMappers.PersonDtoMapper;
+import Dtos.CatDto;
 import Dtos.PersonDto;
+import Models.Cat;
 import Models.Person;
+import com.maksim.Lab3.externalInterface.RequestsMappers.CatRequestsMapper;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import person.Services.IPersonService;
+import com.maksim.Lab3.persons.Services.IPersonService;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/persons")
-@ComponentScan(basePackages = "person")
+@ComponentScan(basePackages = "com.maksim.Lab3.persons.Services")
 public class PersonController {
 
     private final IPersonService personService;
@@ -40,6 +45,14 @@ public class PersonController {
         Person person = PersonDtoMapper.mapToModel(personDto);
         personService.addPerson(person);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> addCat(@PathVariable UUID id, @RequestBody CatDto catDto) {
+//        kafkaService.sendAsynchronously(CatRequestsMapper.addCat(catDto), "cat-topic");
+        Cat cat = CatDtoMapper.mapToModel(catDto);
+        personService.addCat(cat, id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")

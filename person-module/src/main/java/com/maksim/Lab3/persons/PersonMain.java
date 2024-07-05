@@ -1,4 +1,4 @@
-package com.maksim.Lab3.externalInterface;
+package com.maksim.Lab3.persons;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 //@EnableJpaRepositories(basePackages = "com.maksim.Lab3.daos")
-@ComponentScan(basePackages = {"com.maksim.Lab3.cat", "com.maksim.Lab3.externalInterface.Services", "com.maksim.Lab3.externalInterface.Controllers"})
+//@ComponentScan(basePackages = {"com.maksim.Lab3.cat", "com.maksim.Lab3.externalInterface.Services", "com.maksim.Lab3.externalInterface.Controllers"})
+@ComponentScan(basePackages = {"com.maksim.Lab3.cat"})
 @EntityScan(basePackages = {"Entities"})
-public class Lab3Application {
+public class PersonMain {
     public static void main(String[] args) {
-        SpringApplication.run(Lab3Application.class, args);
+        SpringApplication.run(PersonMain.class, args);
     }
 }

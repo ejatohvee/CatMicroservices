@@ -5,14 +5,17 @@ import Dtos.CatDto;
 import Models.Cat;
 import Models.CatColor;
 import com.maksim.Lab3.cat.Services.ICatService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.maksim.Lab3.externalInterface.RequestsMappers.CatRequestsMapper;
+import com.maksim.Lab3.externalInterface.kafka.KafkaService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import person.Services.IPersonService;
+import com.maksim.Lab3.persons.Services.IPersonService;
 
 import java.security.Principal;
 import java.util.List;
@@ -20,18 +23,16 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/cats")
-//@ComponentScan(basePackages = "com.maksim.Lab3.cat.Services")
-public class CatController {
-    private final ICatService catService;
-    private final IPersonService personService;
+    @RestController
+    @RequestMapping("/cats")
+    @RequiredArgsConstructor
+    @Slf4j
+    @ComponentScan(basePackages = "com.maksim.Lab3.externalInterface.kafka")
+    public class CatController {
+        private final ICatService catService;
+        private final IPersonService personService;
 
-    @Autowired
-    public CatController(ICatService catService, IPersonService personService) {
-        this.catService = catService;
-        this.personService = personService;
-    }
+        private final KafkaService kafkaService;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
@@ -44,13 +45,17 @@ public class CatController {
                     CatDto catDto = CatDtoMapper.mapToDto(cat);
                     return ResponseEntity.ok(catDto);
                 });
+//        CatDto reply = kafkaService.sendSynchronously(CatRequestsMapper.getCatById(id), "cat-topic", CatDto.class);
+//        return CompletableFuture.completedFuture(ResponseEntity.ok(reply));
+//
+//        CompletableFuture<Cat> cat = catService.getCatById(id);
+//        return CompletableFuture.completedFuture(ResponseEntity.ok(CatDtoMapper.mapToDto(cat)));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN') or @personService.catsOwner(#id, authentication.name)")
     public ResponseEntity<Void> updateCat(@PathVariable UUID id, @RequestBody CatDto catDto) {
-        Cat cat = CatDtoMapper.mapToModel(catDto);
-        catService.updateCat(id, cat);
+        kafkaService.sendAsynchronously(CatRequestsMapper.updateCat(id, catDto), "cat-topic");
         return ResponseEntity.ok().build();
     }
 
@@ -85,5 +90,4 @@ public class CatController {
                     );
                 });
     }
-
 }

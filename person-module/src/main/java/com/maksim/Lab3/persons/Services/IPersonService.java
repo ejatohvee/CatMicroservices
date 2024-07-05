@@ -1,4 +1,4 @@
-package person.Services;
+package com.maksim.Lab3.persons.Services;
 
 import Models.Cat;
 import Models.Person;

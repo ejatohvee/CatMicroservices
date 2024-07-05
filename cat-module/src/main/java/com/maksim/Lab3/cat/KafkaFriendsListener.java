@@ -1,7 +1,7 @@
 package com.maksim.Lab3.cat;
 
 import com.maksim.Lab3.cat.Services.ICatService;
-import com.maksim.Lab3.contracts.catFriends.requests.makeFriends;
+import com.maksim.Lab3.contracts.catFriends.requests.MakeFriends;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaHandler;
@@ -17,7 +17,7 @@ public class KafkaFriendsListener {
     private final ICatService catService;
 
     @KafkaHandler
-    public void makeFriends(makeFriends command) {
+    public void makeFriends(MakeFriends command) {
         catService.makeFriends(command.catOneId(), command.catTwoId());
         log.info("Make friends command called");
     }
